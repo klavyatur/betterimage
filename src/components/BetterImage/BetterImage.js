@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import axios from 'axios';
 
 let counter = 0;
 
@@ -58,27 +59,27 @@ function BetterImage(props) {
     
     ////////////////* Convert Image Format to WEBP Functionality */////////////////
     
-    async function convertImg(imgName, imgType, quality, images) {
-      if (!images[`${imgName}.webp`]) {
-        //changing the state once(true/false)
-        // setOnce(true);
-        // console.log(once);
-        images[`${imgName}.webp`] = `${imgName}.webp`;
+    // async function convertImg(imgName, imgType, quality, images) {
+    //   if (!images[`${imgName}.webp`]) {
+    //     //changing the state once(true/false)
+    //     // setOnce(true);
+    //     // console.log(once);
+    //     images[`${imgName}.webp`] = `${imgName}.webp`;
         
-        let result = await fetch("/api/convert", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            imageName: imgName,
-            imgType: imgType,
-            quality: quality,
-          }),
-        })
-        .then(res => res.json());
-      }
-    }
+    //     let result = await fetch("/api/convert", {
+    //       method: "POST",
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //       },
+    //       body: JSON.stringify({
+    //         imageName: imgName,
+    //         imgType: imgType,
+    //         quality: quality,
+    //       }),
+    //     })
+    //     .then(res => res.json());
+    //   }
+    // }
     
     ////////////////////* Chaining the APIs Together */////////////////////
     // function renderImage() {
@@ -91,8 +92,19 @@ function BetterImage(props) {
         
         useEffect(() => {
           // console.log("useEffect counter: ", counter);
-          convertImg(imgName, imgType, quality, images);
-        }, [imgName])
+          const runFetch = async () => {
+            const result = await axios({
+              method: 'post',
+              url: '/api/convert',
+              data: {
+                'imageName': imgName, 
+                'imgType': imgType, 
+                'quality': quality
+              }
+            });
+          };
+          runFetch();
+        }, []);
         
         ////////////////////* Render the modifed image component */////////////////////
         return (
