@@ -1,5 +1,6 @@
 import React from 'react';
 import RenderedImage from './RenderedImage.js';
+import placeholder from "../App/images/placeholder.webp";
 
 export default class BetterImage extends React.Component {
   constructor(props){
@@ -86,7 +87,7 @@ export default class BetterImage extends React.Component {
   render(){
     let sourceRoutePath = this.importAll(require.context('./convertedImage', false, /\.(png|jpe?g|webp|svg)$/));
     let sourceRoute = sourceRoutePath[[`${(this.state.imageName)}.webp`]];
-    let defaultImage = sourceRoutePath["default.png"];
+    // let defaultImage = sourceRoutePath["default.png"];
     // console.log("default Image", defaultImage.default)
 
     // {console.log("rendered", this.state.fetched)}
@@ -94,7 +95,7 @@ export default class BetterImage extends React.Component {
 
     return (
       <section>
-        { sourceRoute && this.state.dataOk === false ? <RenderedImage sourceRoute={sourceRoute} defaultImage={defaultImage} /> : this.fetchData()  }
+        { sourceRoute && this.state.dataOk === false ? <RenderedImage sourceRoute={sourceRoute} defaultImage={placeholder} /> : this.fetchData()  }
       </section>
     );
   }

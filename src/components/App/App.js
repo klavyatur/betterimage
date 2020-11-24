@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import BetterImage from '../BetterImage/BetterImage.js';
 import originalImage from './images/bestPhotoEver.png';
-import bigPNG from "./images/bigPNG.png"
+import bigPNG from "./images/bigPNG.png";
+import placeholder from "./images/placeholder.webp";
 
 
 class App extends Component {
@@ -11,9 +12,9 @@ class App extends Component {
       <div>
         <BetterImage
           source={bigPNG}
-          resize={'900x1200'}
+          resize={'600x900'}
           format={'webp'}
-          quality={100}
+          quality={80}
         />
       </div>
     );
