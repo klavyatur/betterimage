@@ -9,7 +9,7 @@ imageController.convertWebp = async (req, res, next) => {
 
   const result = await webp.cwebp(
     path.resolve(__dirname, `../../src/components/App/images/${imageName}.${imgType}`),
-    path.resolve(__dirname, `../../src/components/BetterImage/convertedImage/${imageName}.webp`),
+    path.resolve(__dirname, `../../public/img/${imageName}.webp`),
     `-q ${quality}`
   );
   res.locals.instance = true;

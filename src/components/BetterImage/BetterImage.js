@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 
 let counter = 0;
 
@@ -12,13 +12,13 @@ function BetterImage(props) {
   //////////////////* HELPER fUNCTIONS *///////////////////
   ////////////////////* import all images in optimized folder */////////////////////
   let images = {};
-  function importAll(r) {
-    r.keys().map((item) => {
-      images[item.replace("./", "")] = r(item);
-    });
+  // function importAll(r) {
+  //   r.keys().map((item) => {
+  //     images[item.replace("./", "")] = r(item);
+  //   });
 
-    return images;
-  }
+  //   return images;
+  // }
 
   
   // let originalImages = importAll(
@@ -58,14 +58,14 @@ function BetterImage(props) {
     
     ////////////////* Convert Image Format to WEBP Functionality */////////////////
     
-    function convertImg(imgName, imgType, quality, images) {
+    async function convertImg(imgName, imgType, quality, images) {
       if (!images[`${imgName}.webp`]) {
         //changing the state once(true/false)
         // setOnce(true);
         // console.log(once);
         images[`${imgName}.webp`] = `${imgName}.webp`;
         
-        fetch("/api/convert", {
+        let result = await fetch("/api/convert", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -75,7 +75,8 @@ function BetterImage(props) {
             imgType: imgType,
             quality: quality,
           }),
-        });
+        })
+        .then(res => res.json());
       }
     }
     
@@ -89,10 +90,9 @@ function BetterImage(props) {
         resizeFunc(resize);
         
         useEffect(() => {
-          console.log("useEffect counter: ", counter);
+          // console.log("useEffect counter: ", counter);
           convertImg(imgName, imgType, quality, images);
-        }, [])
-        images[imgName] = require.context("./convertedImage", false, /\'${imgName}'/);
+        }, [imgName])
         
         ////////////////////* Render the modifed image component */////////////////////
         return (
@@ -101,8 +101,7 @@ function BetterImage(props) {
           {/* {convertImg(imgName, quality, images)} */}
           {console.log(imgName, imgType)}
       <img
-        src={importAll(
-          require.context("./convertedImage", false, /\.(png|jpe?g|webp|svg)$/))[`${imgName}.webp`]}
+        src={`/img/${imgName}.webp`}
         style={{
           width: `${resizedImageWidth}px`,
           height: `${resizedImageHeight}px`,
