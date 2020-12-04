@@ -1,94 +1,144 @@
 import React from 'react';
-import RenderedImage from './RenderedImage.js';
 import { Img } from 'react-image';
 
 export default function BetterImage(props) {
-  const { source, resize, format, quality, loading, rotation } = props;
-  // console.log(source, resize, quality, for mat, rotation)
+  ////////////////////* Hoisted Constants *////////////
+  const { resize, source, quality, rotation, blur, grayscale, brightness, contrast, sepia, invert, saturate, opacity, hueRotate, dropShadow, roundCorners, border, matrix, translate, scale, skew, perspective, rotateX, rotateY } = props;
 
-  ///////////////////////////* Hoisted Variables */////////////////////////////
+  const fileName = source.split('/').pop();
+  const originalImageType = fileName.split('.').pop();
+  const imgName = fileName.split('.').shift();
+
+  ///////////////////////* Hoisted Variables *///////////////////////
   let resizedImageWidth;
   let resizedImageHeight;
   let rotationDegree;
-  let images = {};
+  let shadowColor;
+  let borderColor;
+  let borderThick;
+  let matrix3;
+  let matrix4;
+  let matrix5;
+  let matrix6;
+  let translatePx;
+  let translatePercent;
+  let scaleX;
+  let scaleY;
+  let skewX;
+  let skewY;
 
-  /////////////////////////* Image Resize Functionality *////////////////////////
-  function resizeFunc(string) {
-    let foundX = false;
-    let num1 = '';
-    let num2 = '';
 
-    for (let i = 0; i < string.length; i++) {
-      if (string[i] !== 'x' && foundX === false) {
-        num1 = num1.concat(string[i]);
-      } else if (string[i] === 'x') {
-        foundX = true;
-      } else if (string[i] !== 'x' && foundX === true) {
-        num2 = num2.concat(string[i]);
-      }
-    }
-    resizedImageHeight = Number(num1);
-    resizedImageWidth = Number(num2);
+  //////////////////////* Image Resize Functionality */////////////////////
+    string = string.split("x");
+    resizedImageHeight = string[0]
+    resizedImageWidth = string[1]
 
-    return;
+    string = string.split(",");
+    borderThick = string[0];
+    borderLine = string[1];
+    borderColor = string[2];
   }
 
   function rotateImg(degree){
     rotationDegree = degree;
   }
   
-  let fileName = source.split('/').pop();
-  let imgType = fileName.split('.').pop();
-  let imgName = fileName.split('.').shift();
-    
-  ////////////////* Convert Image Format to WEBP Functionality */////////////////
-  function convertedImg(imgName, imgType, quality){
-    if (!images[imgName]) {
-      images[imgName] = `${imgName}.webp`;
-
-      fetch('/api/convert', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json' 
-          },
-          body: JSON.stringify({
-            imageName: imgName,
-            imgType: imgType,
-            quality: quality
-        })
-      })
-    }
+  function shadowImg(dropShadow){
+    dropShadow = dropShadow.split(",");
+    shadowX = dropShadow[0];
+    shadowY = dropShadow[1];
+    shadowSize = dropShadow[2];
+    shadowColor = dropShadow[3];
   }
 
-  ////////////////////* converted Images are declared */////////////////////
-  // format
-  const convert = convertedImg(imgName, imgType, quality);
+  function matrixImg(matrix){
+    matrix = matrix.split(",");
+    matrix1 = matrix[0];
+    matrix2 = matrix[1];
+    matrix3 = matrix[2];
+    matrix4 = matrix[3];
+    matrix5 = matrix[4];
+    matrix6 = matrix[5];
+  }
+
+  function translateImg(translate){
+    translate = translate.split(",");
+    translatePx = translate[0];
+    translatePercent = translate[1];
+  }
+
+  function scaleImg(scale){
+    scale = scale.split(",");
+    scaleX = scale[0];
+    scaleY = scale[1];
+  }
+
+  function skewImg(skew){
+    skew = skew.split(",");
+    skewX = skew[0];
+    skewY = skew[1];
+  }
+
+  function convertedImg(imgName, quality, originalImageType){
+    fetch('/api/convert', {
+      method: 'POST',
+      headers: {
+         'Content-Type': 'application/json' 
+         },
+        body: JSON.stringify({
+          imageName: imgName,
+          quality: quality,
+          originalImageType: originalImageType
+        })
+    })
+    .then(
+      console.log("conversion success")
+    )
+    .catch(
+      console.log('in catch block')
+    )
+  }
+
+  ////////////////////* convert image functions invoked */////////////////////
   // resize
   const createImg = resizeFunc(resize, source);
   // rotate
   const rotatedImg = rotateImg(rotation);
+  // shadow
+  const sdwImg = shadowImg(dropShadow);
+  // border
+  const borderImg = borderImage(border);
+  // matrix
+  const matrixImage = matrixImg(matrix);
+  // translate
+  const translateImage = translateImg(translate);
+  // scale
+  const scaleImage = scaleImg(scale);
+  // skew
+  const skewImage = skewImg(skew);
+
 
   ////////////////////* import all images in optimized folder */////////////////////
   function importAll(r) {
     r.keys().map((item, index) => { images[imgName] = r(item); });
     return images;
   }
-  images = importAll(require.context('./convertedImage', false, /\.(png|jpe?g|webp|svg)$/));
- 
 
-  ////////////////////* Chaining the APIs Together */////////////////////
-  // switch statement
-
-  let imgSrc = images[imgName]
+  const images = importAll(require.context('./convertedImage', false, /\.(png|jpe?g|webp|svg)$/));
 
   ////////////////////* Render the modifed image component */////////////////////
   return (
     <div>
-      {convert}
+      {convertedImg(imgName, quality, originalImageType)}
       {createImg}
-      {console.log("render")}
-      {/* {rotatedImg} transform: `rotate(${rotationDegree}deg)`,*/}
-      <Img src={[imgSrc, '/img/placeholder.webp']} style={{ width: `${resizedImageWidth}px`, height: `${resizedImageHeight}px`}} loading={loading} alt="image failed to load" />
+      {rotatedImg}
+      {sdwImg}
+      {borderImg}
+      {matrixImage}
+      {translateImage}
+      {scaleImage}
+      {skewImage}
+      <Img src={[images[`${imgName}.webp`], '/img/placeholder.webp']} style={{filter:`grayscale(${grayscale}%) blur(${blur}px) brightness(${brightness}%) contrast(${contrast}%) sepia(${sepia}%) invert(${invert}%) saturate(${saturate}%) opacity(${opacity}%) hue-rotate(${hueRotate}deg) drop-shadow(${shadowX}px ${shadowY}px ${shadowSize}px ${shadowColor})`, transform: `matrix(${matrix1}, ${matrix2}, ${matrix3}, ${matrix4}, ${matrix5}, ${matrix6}) translate(${translatePx}px, ${translatePercent}%) scale(${scaleX}, ${scaleY}) skew(${skewX}deg, ${skewY}deg) rotateX(${rotateX}deg) rotateY(${rotateY}deg) perspective(${perspective}px) rotate(${rotationDegree}deg)`, width: `${resizedImageWidth}px`, height: `${resizedImageHeight}px`, borderRadius: `${roundCorners}px`, border: `${borderThick}px ${borderLine} ${borderColor}`}} alt="image failed to load"/>
     </div>
   );
 
