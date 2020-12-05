@@ -29,20 +29,22 @@ export default function BetterImage(props) {
 
 
   //////////////////////* Image Resize Functionality */////////////////////
-    string = string.split("x");
+    let string = string.split("x");
     resizedImageHeight = string[0]
     resizedImageWidth = string[1]
 
     string = string.split(",");
     borderThick = string[0];
-    borderLine = string[1];
+    let borderLine = string[1];
     borderColor = string[2];
-  }
+  
 
   function rotateImg(degree){
     rotationDegree = degree;
   }
   
+  let shadowX, shadowY, matrix1, matrix2, shadowSize;
+
   function shadowImg(dropShadow){
     dropShadow = dropShadow.split(",");
     shadowX = dropShadow[0];
@@ -55,7 +57,7 @@ export default function BetterImage(props) {
     matrix = matrix.split(",");
     matrix1 = matrix[0];
     matrix2 = matrix[1];
-    matrix3 = matrix[2];
+    let matrix3 = matrix[2];
     matrix4 = matrix[3];
     matrix5 = matrix[4];
     matrix6 = matrix[5];
@@ -101,13 +103,13 @@ export default function BetterImage(props) {
 
   ////////////////////* convert image functions invoked */////////////////////
   // resize
-  const createImg = resizeFunc(resize, source);
+  // const createImg = resizeFunc(resize, source);
   // rotate
   const rotatedImg = rotateImg(rotation);
   // shadow
   const sdwImg = shadowImg(dropShadow);
   // border
-  const borderImg = borderImage(border);
+  // const borderImg = borderImage(border);
   // matrix
   const matrixImage = matrixImg(matrix);
   // translate
@@ -130,10 +132,10 @@ export default function BetterImage(props) {
   return (
     <div>
       {convertedImg(imgName, quality, originalImageType)}
-      {createImg}
+      {/* {createImg} */}
       {rotatedImg}
       {sdwImg}
-      {borderImg}
+      {/* {borderImg} */}
       {matrixImage}
       {translateImage}
       {scaleImage}
