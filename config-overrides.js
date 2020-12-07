@@ -2,10 +2,16 @@
 
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
-module.exports = function override(config, env) {
-  if (!config.plugins){
-    config.plugins = [];
-  }
-  
-  return config;
-}
+
+// const override = require('customize-cra');
+
+// module.exports = override(
+//   adjustStyleloaders(({ use: []}))
+// )
+
+
+// module.exports = function override(config, env) {
+//   config.module.rules[1].rules[1].length-1.options[esModule] = false;
+
+//   return config;
+// }

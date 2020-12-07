@@ -14,9 +14,9 @@
     "webp-converter": "^2.3.0"
   },
   "scripts": {
-    "start": "react-app-rewired start",
-    "build": "react-app-rewired build",
-    "test": "react-app-rewired test",
+    "start": "rescripts start",
+    "build": "rescripts build",
+    "test": "rescripts test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -48,6 +48,8 @@
   },
   "proxy": "http://localhost:9000",
   "devDependencies": {
+    "@rescripts/cli": "0.0.14",
+    "@rescripts/rescript-env": "0.0.12",
     "copy-webpack-plugin": "^6.3.2",
     "react-app-rewired": "^2.1.7"
   }
