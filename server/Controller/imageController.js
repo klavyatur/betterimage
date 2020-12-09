@@ -4,7 +4,7 @@ const imageController = {}
 
 imageController.convertWebp = (req, res, next) => {
   const { originalImageType, imageName, quality } = req.body;
-  const result = webp.cwebp(path.resolve(__dirname, `../../src/components/App/images/${imageName}.${originalImageType}`), path.resolve(__dirname, `../../src/components/BetterImage/convertedImage/${imageName}.webp`),`-q ${quality}`);
+  const result = webp.cwebp(path.resolve(__dirname, `../../src/components/App/images/${imageName}.${originalImageType}`), path.resolve(__dirname, `./${imageName}.webp`),`-q ${quality}`);
   next()
 }
 
