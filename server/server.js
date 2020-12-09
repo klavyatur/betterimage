@@ -26,7 +26,10 @@ app.use((err, req, res, next) => {
   return res.status(errorObj.status).sendStatus(errorObj.message);
 });
 
-
+// statically serve everything in the build folder on the route '/build'
+if (process.env.NODE_ENV === 'production') {  
+  app.use('/build', express.static(path.join(__dirname, '../build')));
+}
 
 app.listen(PORT, () => {
   console.log(`server on port ${PORT}`)

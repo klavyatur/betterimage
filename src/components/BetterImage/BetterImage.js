@@ -6,6 +6,8 @@ export default function BetterImage(props) {
   ////////////////////* Hoisted Variables *////////////
   let { resize, source, quality, rotation, blur, grayscale, brightness, contrast, sepia, invert, saturate, opacity, hueRotate, dropShadow, roundCorners, border, matrix, translate, scale, skew, perspective, rotateX, rotateY } = props;
 
+  console.log("source", source);
+
   const fileName = source.split('/').pop();
   const originalImageType = fileName.split('.').pop();
   const imgName = fileName.split('.').shift();
@@ -83,6 +85,9 @@ export default function BetterImage(props) {
   }
 
   function convertedImg(imgName, quality, originalImageType){
+    
+    console.log("fetch", `\n ${imgName} \n`)
+    
     fetch('/api/convert', {
       method: 'POST',
       headers: {
